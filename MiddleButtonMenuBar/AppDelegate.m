@@ -7,21 +7,23 @@
 //
 
 #import "AppDelegate.h"
+#import "MenuManager.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <NSMenuDelegate>
 
-@property (weak) IBOutlet NSWindow *window;
+@property (nonatomic, strong) MenuManager *menuManager;
+
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+    self.menuManager = [MenuManager new];
+    [self.menuManager setup];
 }
 
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
 }
 
 
