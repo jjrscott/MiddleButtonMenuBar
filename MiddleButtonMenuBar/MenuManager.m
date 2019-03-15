@@ -182,6 +182,35 @@ static OSStatus InstallMouseDownHandler(void *userInfo) {
         
         AXUIElementRef primaryElement = (AXUIElementRef) [UIElementUtilities valueOfAttribute:@"AXMenuItemPrimaryUIElement" ofUIElement:element];
         
+        NSString *keyEquivalent = [UIElementUtilities valueOfAttribute:@"AXMenuItemCmdChar" ofUIElement:element];
+        if (keyEquivalent) {
+            menuItem.keyEquivalent =  keyEquivalent.lowercaseString;
+        }
+        
+        NSUInteger menuItemCmdModifiers = [[UIElementUtilities valueOfAttribute:@"AXMenuItemCmdModifiers" ofUIElement:element] integerValue];
+        
+        NSEventModifierFlags keyEquivalentModifierMask = 0;
+
+        if (menuItemCmdModifiers & kMenuShiftModifier)
+        {
+            keyEquivalentModifierMask |= NSEventModifierFlagShift;
+        }
+        if (menuItemCmdModifiers & kMenuOptionModifier)
+        {
+            keyEquivalentModifierMask |= NSEventModifierFlagOption;
+        }
+        if (menuItemCmdModifiers & kMenuControlModifier)
+        {
+            keyEquivalentModifierMask |= NSEventModifierFlagControl;
+        }
+        if (menuItemCmdModifiers ^ kMenuNoCommandModifier)
+        {
+            keyEquivalentModifierMask |= NSEventModifierFlagCommand;
+        }
+
+        
+        menuItem.keyEquivalentModifierMask = keyEquivalentModifierMask;
+        
         //        if (primaryElement)
         //        {
         //            NSLog(@"%@", [self descriptionForUIElement:element recurseDepth:~0]);
